@@ -1,0 +1,31 @@
+int sum(int a, int b) {
+    return a + b;
+}
+
+int number1;
+number1 = 1;
+int number2;
+number2 = 2;
+int result;
+result = sum(a, b);
+char s;
+s = 'c';
+bool isGood;
+isGood = true;
+if (isGood == true) {
+    isGood = false;
+} else {
+    isGood = true;
+}
+
+array int array1;
+array1 = array.New(6);
+
+for (int i = 0; i < 3; i = i + 1) {
+    array1[1] = 1;
+}
+int j;
+j = 0;
+while (j < 10) {
+    j = j + 1;
+}
