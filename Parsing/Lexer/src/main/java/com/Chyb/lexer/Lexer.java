@@ -7,6 +7,7 @@ import com.Chyb.token.type.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Lexer implements ILexer {
     private final String input;
@@ -15,6 +16,14 @@ public class Lexer implements ILexer {
         this.input = input;
     }
     public IToken tokenize (){
+        String regex = "^'.{1}'$";
+        Pattern pattern = Pattern.compile(regex);
+        if (position + 3 < input.length()) {
+            if (pattern.matcher(input.substring(position, position+3)).matches()) {
+                position += 3;
+                return new Token(input.substring(position-3, position), TokenType.CHAR_LITERAL);
+            }
+        }
         if (position>=input.length()) return null;
         if (input.startsWith("+", position)) {
             position++;
@@ -65,45 +74,78 @@ public class Lexer implements ILexer {
             return new Token("&&", TokenType.OPERATOR);
         }
 
-        if (input.startsWith("int ", position)) {
-            position+=3;
-            return new Token("int", TokenType.TYPE);
+        if (input.startsWith("int", position)) {
+            if (!Character.isLetter(input.charAt(position+3)) && !Character.isDigit(input.charAt(position+3))) {
+                position += 3;
+                return new Token("int", TokenType.TYPE);
+            }
         }
-        if (input.startsWith("char ", position)) {
-            position+=4;
-            return new Token("char", TokenType.TYPE);
+        if (input.startsWith("char", position)) {
+            if (!Character.isLetter(input.charAt(position+4)) && !Character.isDigit(input.charAt(position+4))) {
+                position += 4;
+                return new Token("char", TokenType.TYPE);
+            }
         }
-        if (input.startsWith("bool ", position)) {
-            position+=4;
-            return new Token("bool", TokenType.TYPE);
+        if (input.startsWith("true", position)) {
+            if (!Character.isLetter(input.charAt(position+4)) && !Character.isDigit(input.charAt(position+4))) {
+                position+=4;
+                return new Token("true", TokenType.BOOLEAN_LITERAL);
+            }
         }
-        if (input.startsWith("array ", position)) {
-            position+=5;
-            return new Token("array", TokenType.TYPE);
+        if (input.startsWith("false", position)) {
+            if (!Character.isLetter(input.charAt(position+5)) && !Character.isDigit(input.charAt(position+5))) {
+                position+=5;
+                return new Token("false", TokenType.BOOLEAN_LITERAL);
+            }
         }
-        if (input.startsWith("void ", position)) {
-            position+=4;
-            return new Token("void", TokenType.VOID);
+
+        if (input.startsWith("bool", position)) {
+            if (!Character.isLetter(input.charAt(position+4)) && !Character.isDigit(input.charAt(position+4))) {
+                position += 4;
+                return new Token("bool", TokenType.TYPE);
+            }
+        }
+        if (input.startsWith("array", position)) {
+            if (!Character.isLetter(input.charAt(position+5)) && !Character.isDigit(input.charAt(position+5))) {
+                position += 5;
+                return new Token("array", TokenType.TYPE);
+            }
+        }
+        if (input.startsWith("void", position)) {
+            if (!Character.isLetter(input.charAt(position+4)) && !Character.isDigit(input.charAt(position+4))) {
+                position += 4;
+                return new Token("void", TokenType.VOID);
+            }
         }
         if (input.startsWith("return", position)) {
-            position+=6;
-            return new Token("return ", TokenType.RETURN);
+            if (!Character.isLetter(input.charAt(position+6))  && !Character.isDigit(input.charAt(position+6))) {
+                position += 6;
+                return new Token("return", TokenType.RETURN);
+            }
         }
-        if (input.startsWith("if ", position)) {
-            position+=2;
-            return new Token("if", TokenType.IF);
+        if (input.startsWith("if", position)) {
+            if (!Character.isLetter(input.charAt(position+2)) && !Character.isDigit(input.charAt(position+2))) {
+                position += 2;
+                return new Token("if", TokenType.IF);
+            }
         }
-        if (input.startsWith("else ", position)) {
-            position+=4;
-            return new Token("else", TokenType.ELSE);
+        if (input.startsWith("else", position)) {
+            if (!Character.isLetter(input.charAt(position+4)) && !Character.isDigit(input.charAt(position+4))) {
+                position += 4;
+                return new Token("else", TokenType.ELSE);
+            }
         }
-        if (input.startsWith("for ", position)) {
-            position+=3;
-            return new Token("for", TokenType.FOR);
+        if (input.startsWith("for", position)) {
+            if (!Character.isLetter(input.charAt(position+3)) && !Character.isDigit(input.charAt(position+3))) {
+                position += 3;
+                return new Token("for", TokenType.FOR);
+            }
         }
-        if (input.startsWith("while ", position)) {
-            position+=5;
-            return new Token("while", TokenType.WHILE);
+        if (input.startsWith("while", position)) {
+            if (!Character.isLetter(input.charAt(position+5)) && !Character.isDigit(input.charAt(position+5))) {
+                position += 5;
+                return new Token("while", TokenType.WHILE);
+            }
         }
         if (input.startsWith("= ", position)) {
             position+=1;
@@ -118,8 +160,10 @@ public class Lexer implements ILexer {
             return new Token(".", TokenType.DOT);
         }
         if (input.startsWith("New", position)) {
-            position+=3;
-            return new Token("New", TokenType.FUNCTION);
+            if (!Character.isLetter(input.charAt(position+3)) && !Character.isDigit(input.charAt(position+3))) {
+                position += 3;
+                return new Token("New", TokenType.FUNCTION);
+            }
         }
         if (input.startsWith(";", position)) {
             position+=1;
@@ -157,23 +201,28 @@ public class Lexer implements ILexer {
             }
             return new Token(number.toString(), TokenType.NUMBER);
         }
-        if (Character.isDigit(input.charAt(position))) {
+        if (Character.isLetter(input.charAt(position))) {
             StringBuilder name = new StringBuilder();
-            while (Character.isLetter(input.charAt(position))) {
+            while (Character.isDigit(input.charAt(position)) || Character.isLetter(input.charAt(position))) {
                 name.append(input.charAt(position));
                 position++;
+            }
+            if (input.charAt(position)=='(') {
+                return new Token(name.toString(), TokenType.FUNCTION);
             }
             return new Token(name.toString(), TokenType.IDENTIFIER);
         }
         position++;
-        return new Token("null", TokenType.INVALID);
+        return null;
     }
 
     public List<IToken> getTokens(){
         List<IToken> tokens = new ArrayList<>();
         while (position<input.length()) {
             IToken token = tokenize();
-            tokens.add(token);
+            if (token!=null) {
+                tokens.add(token);
+            }
         }
         return tokens;
     }
