@@ -15,7 +15,7 @@ public class Lexer implements ILexer {
     public Lexer(String input) {
         this.input = input;
     }
-    public IToken tokenize (){
+    private IToken tokenize (){
         String regex = "^'.{1}'$";
         Pattern pattern = Pattern.compile(regex);
         if (position + 3 < input.length()) {
