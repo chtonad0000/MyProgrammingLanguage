@@ -162,7 +162,7 @@ public class Lexer implements ILexer {
         if (input.startsWith("New", position)) {
             if (!Character.isLetter(input.charAt(position+3)) && !Character.isDigit(input.charAt(position+3))) {
                 position += 3;
-                return new Token("New", TokenType.FUNCTION);
+                return new Token("New", TokenType.NEW);
             }
         }
         if (input.startsWith(";", position)) {

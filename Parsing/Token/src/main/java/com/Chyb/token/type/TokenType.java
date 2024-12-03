@@ -1,8 +1,6 @@
 package com.Chyb.token.type;
 
 public enum TokenType {
-    // Ключевые слова
-    KEYWORD,          // Например, int, void, return, if, else и т.д.
     IDENTIFIER,       // Имена переменных, функций и других идентификаторов.
 
     // Литералы
@@ -42,7 +40,8 @@ public enum TokenType {
     WHILE,            // while
     RETURN,           // return
     BREAK,            // break
-    CONTINUE,         // continue
+    CONTINUE,
+    NEW,
 
     // Прочие ключевые слова
     FUNCTION,         // function
