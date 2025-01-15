@@ -212,7 +212,7 @@ public class Parser {
             moveToNext();
             ASTNode arguments = parseArgs();
             expect(TokenType.SEMICOLON);
-            return new FunctionNode(function, arguments);
+            return new FunctionCallNode(function, ((ArgumentsNode)arguments).getArguments());
         } else if (isType(TokenType.IF)) {
             return parseIfStatement();
         } else if (isType(TokenType.WHILE)) {
@@ -345,7 +345,7 @@ public class Parser {
 
     private ASTNode parsePrimary() {
         if (isType(TokenType.NUMBER)) {
-            ASTNode numberNode = new NumberNode(currentToken().getValue());
+            ASTNode numberNode = new NumberNode(Integer.parseInt(currentToken().getValue()));
             moveToNext();
             return numberNode;
         } else if (isType(TokenType.IDENTIFIER)) {

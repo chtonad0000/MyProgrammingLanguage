@@ -1,13 +1,15 @@
 package com.l_st_lxx.Nodes;
 
-public class NumberNode extends ASTNode {
-    private final String value;
+import com.l_st_lxx.Visitor.ASTVisitor;
 
-    public NumberNode(String value) {
+public class NumberNode extends ASTNode {
+    private final int value;
+
+    public NumberNode(int value) {
         this.value = value;
     }
 
-    public String getValue() {
+    public int getValue() {
         return value;
     }
 
@@ -19,5 +21,15 @@ public class NumberNode extends ASTNode {
     @Override
     public String toPrettyString(int indentLevel) {
         return getIndent(indentLevel) + value;
+    }
+
+    @Override
+    public void accept(ASTVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.NUMBER;
     }
 }

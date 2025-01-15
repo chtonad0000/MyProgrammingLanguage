@@ -1,5 +1,7 @@
 package com.l_st_lxx.Nodes;
 
+import com.l_st_lxx.Visitor.ASTVisitor;
+
 public class ArrayCreationNode extends ASTNode {
     private final ASTNode sizeExpression;
 
@@ -28,5 +30,15 @@ public class ArrayCreationNode extends ASTNode {
             builder.append(indent).append("  Size Expression: null\n");
         }
         return builder.toString();
+    }
+
+    @Override
+    public void accept(ASTVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.ARRAY_CREATION;
     }
 }

@@ -1,5 +1,7 @@
 package com.l_st_lxx.Nodes;
 
+import com.l_st_lxx.Visitor.ASTVisitor;
+
 import java.util.List;
 
 public class FunctionDeclarationNode extends ASTNode {
@@ -43,6 +45,7 @@ public class FunctionDeclarationNode extends ASTNode {
 
     @Override
     public void print() {
+        System.out.println("FunctionDeclarationNode");
         System.out.print(returnType + " " + name + "(");
         for (int i = 0; i < parameters.size(); i++) {
             parameters.get(i).print();
@@ -66,5 +69,15 @@ public class FunctionDeclarationNode extends ASTNode {
         sb.append(")\n");
         sb.append(body.toPrettyString(indentLevel));
         return sb.toString();
+    }
+
+    @Override
+    public void accept(ASTVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.FUNCTION_DECLARATION;
     }
 }

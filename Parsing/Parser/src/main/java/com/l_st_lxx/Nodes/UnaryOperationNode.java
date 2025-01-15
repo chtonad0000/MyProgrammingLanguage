@@ -1,5 +1,7 @@
 package com.l_st_lxx.Nodes;
 
+import com.l_st_lxx.Visitor.ASTVisitor;
+
 public class UnaryOperationNode extends ASTNode {
     private final ASTNode operand;
     private final String operator;
@@ -27,5 +29,15 @@ public class UnaryOperationNode extends ASTNode {
     public String toPrettyString(int indentLevel) {
         return getIndent(indentLevel) + operator +
                 operand.toPrettyString(indentLevel + 1);
+    }
+
+    @Override
+    public void accept(ASTVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.UNARY_OPERATION;
     }
 }

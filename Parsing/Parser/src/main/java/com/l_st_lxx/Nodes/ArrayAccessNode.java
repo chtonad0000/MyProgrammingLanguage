@@ -1,5 +1,7 @@
 package com.l_st_lxx.Nodes;
 
+import com.l_st_lxx.Visitor.ASTVisitor;
+
 public class ArrayAccessNode extends ASTNode {
     private final String arrayName;
     private final ASTNode index;
@@ -35,5 +37,15 @@ public class ArrayAccessNode extends ASTNode {
             builder.append(indent).append("  Index: null\n");
         }
         return builder.toString();
+    }
+
+    @Override
+    public void accept(ASTVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.ARRAY_ACCESS;
     }
 }

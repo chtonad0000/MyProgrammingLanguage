@@ -1,5 +1,7 @@
 package com.l_st_lxx.Nodes;
 
+import com.l_st_lxx.Visitor.ASTVisitor;
+
 public class ForNode extends ASTNode {
     private final ASTNode initialization;
     private final ASTNode condition;
@@ -53,5 +55,15 @@ public class ForNode extends ASTNode {
         if (step != null) sb.append(step.toPrettyString(indentLevel));
         sb.append(") ").append("\n").append(body.toPrettyString(indentLevel + 1));
         return sb.toString();
+    }
+
+    @Override
+    public void accept(ASTVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.FOR;
     }
 }

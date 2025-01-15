@@ -1,5 +1,7 @@
 package com.l_st_lxx.Nodes;
 
+import com.l_st_lxx.Visitor.ASTVisitor;
+
 public class ArrayDeclarationNode extends ASTNode {
     private final String elementType;
     private final String name;
@@ -29,5 +31,15 @@ public class ArrayDeclarationNode extends ASTNode {
                 indent + "  Element Type: " + elementType + ",\n" +
                 indent + "  Name: " + name + "\n" +
                 indent + "}";
+    }
+
+    @Override
+    public void accept(ASTVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.ARRAY_DECLARATION;
     }
 }

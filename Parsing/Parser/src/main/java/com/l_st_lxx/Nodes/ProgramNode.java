@@ -1,5 +1,7 @@
 package com.l_st_lxx.Nodes;
 
+import com.l_st_lxx.Visitor.ASTVisitor;
+
 import java.util.List;
 
 public class ProgramNode extends ASTNode {
@@ -29,5 +31,15 @@ public class ProgramNode extends ASTNode {
             sb.append(function.toPrettyString(indentLevel + 1)).append("\n");
         }
         return sb.toString();
+    }
+
+    @Override
+    public void accept(ASTVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.PROGRAM;
     }
 }

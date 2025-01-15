@@ -1,5 +1,7 @@
 package com.l_st_lxx.Nodes;
 
+import com.l_st_lxx.Visitor.ASTVisitor;
+
 import java.util.List;
 
 public class ArgumentsNode extends ASTNode {
@@ -35,5 +37,15 @@ public class ArgumentsNode extends ASTNode {
             builder.append(indent).append("  No Arguments\n");
         }
         return builder.toString();
+    }
+
+    @Override
+    public void accept(ASTVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.ARGUMENTS;
     }
 }
