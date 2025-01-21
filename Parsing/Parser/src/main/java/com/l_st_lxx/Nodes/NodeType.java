@@ -1,0 +1,24 @@
+package com.l_st_lxx.Nodes;
+
+public enum NodeType {
+    ARGUMENTS,
+    ARRAY_ACCESS,
+    ARRAY_CREATION,
+    ARRAY_DECLARATION,
+    ASSIGNMENT,
+    BINARY_OPERATION,
+    BLOCK,
+    BOOL,
+    CHAR,
+    FOR,
+    FUNCTION_CALL,
+    FUNCTION_DECLARATION,
+    FUNCTION,
+    IDENTIFIER,
+    IF,
+    NUMBER,
+    PROGRAM,
+    UNARY_OPERATION,
+    VARIABLE_DECLARATION,
+    WHILE
+}
