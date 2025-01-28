@@ -22,4 +22,5 @@ public interface ASTVisitor {
     void visit(UnaryOperationNode node);
     void visit(VariableDeclarationNode node);
     void visit(WhileNode node);
+    void visit(ReturnNode node);
 }

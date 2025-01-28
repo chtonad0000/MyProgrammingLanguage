@@ -20,5 +20,6 @@ public enum NodeType {
     PROGRAM,
     UNARY_OPERATION,
     VARIABLE_DECLARATION,
-    WHILE
+    WHILE,
+    RETURN
 }

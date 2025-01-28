@@ -2,3 +2,4 @@ rootProject.name = "Parsing"
 include("Token")
 include("Parser")
 include("Lexer")
+include("ByteCodeGenerator")
