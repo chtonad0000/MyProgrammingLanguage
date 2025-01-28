@@ -14,8 +14,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation(project(":Token"))
     implementation(project(":Parser"))
-    implementation(project(":Lexer"))
-    implementation(project(":ByteCodeGenerator"))
 }
 
 tasks.test {

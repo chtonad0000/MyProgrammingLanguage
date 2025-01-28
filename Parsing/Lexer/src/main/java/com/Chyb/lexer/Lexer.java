@@ -41,6 +41,10 @@ public class Lexer implements ILexer {
             position++;
             return new Token("/", TokenType.OPERATOR);
         }
+        if (input.startsWith("%", position)) {
+            position++;
+            return new Token("%", TokenType.OPERATOR);
+        }
         if (input.startsWith(">= ", position)) {
             position+=2;
             return new Token(">=", TokenType.OPERATOR);

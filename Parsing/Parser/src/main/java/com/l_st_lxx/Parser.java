@@ -33,7 +33,6 @@ public class Parser {
         return new ProgramNode(funcNodes);
     }
 
-
     public void moveToNext() {
         if (iterator.hasNext()) {
             currentToken = iterator.next();
@@ -48,7 +47,8 @@ public class Parser {
 
     private void expect(TokenType type) {
         if (!isType(type)) {
-            throw new RuntimeException("Expected token of type " + type + ", but got " + currentToken().getValue() + " " +
+            throw new RuntimeException("Expected token of type " + type + ", but got " +
+                    (currentToken() != null ? currentToken().getValue() : "EOF") + " " +
                     (currentToken() != null ? currentToken().getType() : "EOF"));
         }
         moveToNext();
@@ -79,6 +79,7 @@ public class Parser {
                 moveToNext();
 
                 if (!isType(TokenType.IDENTIFIER)) {
+                    System.out.println(currentToken.getValue());
                     throw new RuntimeException("Expected parameter name in function declaration.");
                 }
                 String paramName = currentToken().getValue();
@@ -125,7 +126,6 @@ public class Parser {
 
         return new ForNode(initialization, condition, step, body);
     }
-
 
     private ASTNode parseIfStatement() {
         expect(TokenType.IF);
@@ -189,6 +189,7 @@ public class Parser {
             } else {
                 return new VariableDeclarationNode(type, identifier);
             }
+
         } else if (isType(TokenType.IDENTIFIER)) {
             String identifier = currentToken().getValue();
             moveToNext();
@@ -207,18 +208,32 @@ public class Parser {
             ASTNode value = parseExpression();
             expect(TokenType.SEMICOLON);
             return new AssignmentNode(target, value);
+
         } else if (isType(TokenType.FUNCTION)) {
             String function = currentToken().getValue();
             moveToNext();
             ASTNode arguments = parseArgs();
             expect(TokenType.SEMICOLON);
             return new FunctionCallNode(function, ((ArgumentsNode)arguments).getArguments());
+
         } else if (isType(TokenType.IF)) {
             return parseIfStatement();
+
         } else if (isType(TokenType.WHILE)) {
             return parseWhileStatement();
+
+
         } else if (isType(TokenType.FOR)) {
             return parseForStatement();
+
+        } else if (isType(TokenType.RETURN)) {
+            moveToNext();
+            ASTNode returnExpression = null;
+            if (!isType(TokenType.SEMICOLON)) {
+                returnExpression = parseExpression();
+            }
+            expect(TokenType.SEMICOLON);
+            return new ReturnNode(returnExpression);
         }
 
         throw new RuntimeException("Invalid statement starting at: " +
@@ -244,7 +259,6 @@ public class Parser {
         return new ArgumentsNode(args);
     }
 
-
     private ASTNode parseExpression() {
         return parseLogicalOr();
     }
@@ -253,7 +267,7 @@ public class Parser {
         ASTNode left = parseLogicalAnd();
 
         while (currentToken() != null && isType(TokenType.OPERATOR) &&
-                currentToken().getValue().equals("||")) {
+                "||".equals(currentToken().getValue())) {
             String operator = currentToken().getValue();
             moveToNext();
             ASTNode right = parseLogicalAnd();
@@ -266,7 +280,7 @@ public class Parser {
         ASTNode left = parseEquality();
 
         while (currentToken() != null && isType(TokenType.OPERATOR) &&
-                currentToken().getValue().equals("&&")) {
+                "&&".equals(currentToken().getValue())) {
             String operator = currentToken().getValue();
             moveToNext();
             ASTNode right = parseEquality();
@@ -280,7 +294,7 @@ public class Parser {
         ASTNode left = parseRelational();
 
         while (currentToken() != null && isType(TokenType.OPERATOR) &&
-                (currentToken().getValue().equals("==") || currentToken().getValue().equals("!="))) {
+                ("==".equals(currentToken().getValue()) || "!=".equals(currentToken().getValue()))) {
             String operator = currentToken().getValue();
             moveToNext();
             ASTNode right = parseRelational();
@@ -293,9 +307,11 @@ public class Parser {
     private ASTNode parseRelational() {
         ASTNode left = parseTerm();
 
-        while (currentToken() != null && isType(TokenType.OPERATOR) &&
-                (currentToken().getValue().equals("<") || currentToken().getValue().equals(">") ||
-                        currentToken().getValue().equals("<=") || currentToken().getValue().equals(">="))) {
+        while (currentToken() != null && isType(TokenType.OPERATOR) && (
+                "<".equals(currentToken().getValue())  ||
+                        ">".equals(currentToken().getValue())  ||
+                        "<=".equals(currentToken().getValue()) ||
+                        ">=".equals(currentToken().getValue()))) {
             String operator = currentToken().getValue();
             moveToNext();
             ASTNode right = parseTerm();
@@ -307,8 +323,9 @@ public class Parser {
     private ASTNode parseTerm() {
         ASTNode left = parseFactor();
 
-        while (currentToken() != null && isType(TokenType.OPERATOR) &&
-                (currentToken().getValue().equals("+") || currentToken().getValue().equals("-"))) {
+        while (currentToken() != null && isType(TokenType.OPERATOR) && (
+                "+".equals(currentToken().getValue()) ||
+                        "-".equals(currentToken().getValue()))) {
             String operator = currentToken().getValue();
             moveToNext();
             ASTNode right = parseFactor();
@@ -321,8 +338,11 @@ public class Parser {
     private ASTNode parseFactor() {
         ASTNode left = parseUnary();
 
-        while (currentToken() != null && isType(TokenType.OPERATOR) &&
-                (currentToken().getValue().equals("*") || currentToken().getValue().equals("/"))) {
+        while (currentToken() != null && isType(TokenType.OPERATOR) && (
+                "*".equals(currentToken().getValue()) ||
+                        "/".equals(currentToken().getValue()) ||
+                        "%".equals(currentToken().getValue()))) {
+
             String operator = currentToken().getValue();
             moveToNext();
             ASTNode right = parseUnary();
@@ -333,8 +353,9 @@ public class Parser {
     }
 
     private ASTNode parseUnary() {
-        if (currentToken() != null && isType(TokenType.OPERATOR) &&
-                (currentToken().getValue().equals("-") || currentToken().getValue().equals("!"))) {
+        if (currentToken() != null && isType(TokenType.OPERATOR) && (
+                "-".equals(currentToken().getValue()) ||
+                        "!".equals(currentToken().getValue()))) {
             String operator = currentToken().getValue();
             moveToNext();
             ASTNode operand = parsePrimary();

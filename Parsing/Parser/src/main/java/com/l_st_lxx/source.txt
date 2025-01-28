@@ -1,16 +1,17 @@
 int sum(int a, int b) {
-    int a;
-    a = a + b;
+    int c;
+    c = a + b;
+    return c;
 }
 
 
-int main(){
+int main() {
 int number1;
 number1 = 1;
 int number2;
 number2 = 2;
 int result;
-result = sum(a, b);
+result = sum(number1, number2);
 char s;
 s = 'c';
 bool isGood;
@@ -26,18 +27,4 @@ j = 0;
 while (j < 10) {
     j = j + 1;
 }
-int i;
-
-array int array1;
-array1 = New(6);
-
-
-for (i = 0; i < 3; i = i + 1;) {
-    array1[1] = 1;
-}
-int a;
-a = 2;
-int b;
-b = a * 2;
-
 }

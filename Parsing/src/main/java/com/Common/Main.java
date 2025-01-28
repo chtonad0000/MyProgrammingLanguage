@@ -3,7 +3,6 @@ package com.Common;
 import com.Chub.Visitor.ByteCodeGeneratorVisitor;
 import com.Chyb.lexer.Lexer;
 import com.Chyb.token.interfaces.IToken;
-import com.Chyb.token.type.TokenType;
 import com.l_st_lxx.Nodes.ASTNode;
 import com.l_st_lxx.Nodes.ProgramNode;
 import com.l_st_lxx.Parser;
@@ -15,21 +14,38 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String fileName = "C:\\Users\\d_chu\\MyProgrammingLanguage\\Parsing\\Parser\\src\\main\\java\\com\\l_st_lxx\\source.txt";
-        String content = readFile(fileName);
+        if (args.length < 1) {
+            System.out.println("Usage: java com.Common.Main <input_file>");
+            return;
+        }
+
+        String inputFile = args[0];
+        processFile(inputFile);
+    }
+
+    public static void processFile(String inputFile) {
+        String content = readFile(inputFile);
+
+        if (content.isEmpty()) {
+            System.out.println("Input file is empty or could not be read: " + inputFile);
+            return;
+        }
 
         Lexer lexer = new Lexer(content);
         List<IToken> tokens = lexer.getTokens();
 
         Parser parser = new Parser(tokens);
-
         try {
             ASTNode ast = parser.Parse();
             ByteCodeGeneratorVisitor visitor = new ByteCodeGeneratorVisitor();
             visitor.visit((ProgramNode) ast);
-            System.out.println(visitor.getBytecode());
+
+            String bytecode = visitor.getBytecode();
+            System.out.println(bytecode);
         } catch (RuntimeException e) {
-            System.out.println("Parsing failed: " + e.getMessage());
+            System.out.println("Parsing failed for file: " + inputFile);
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -41,28 +57,9 @@ public class Main {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
+            System.out.println("Failed to read file: " + fileName);
             e.printStackTrace();
         }
         return content.toString();
-    }
-
-    static class Token implements IToken {
-        private final TokenType type;
-        private final String value;
-
-        public Token(TokenType type, String value) {
-            this.type = type;
-            this.value = value;
-        }
-
-        @Override
-        public String getValue() {
-            return value;
-        }
-
-        @Override
-        public TokenType getType() {
-            return type;
-        }
     }
 }
