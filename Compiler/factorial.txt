@@ -1,0 +1,17 @@
+int factorial(int n) {
+    bool cond;
+    cond = (n < 2);
+    if (cond == true) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+int main() {
+    int x;
+    x = 20;
+
+    int result;
+    result = factorial(x);
+}

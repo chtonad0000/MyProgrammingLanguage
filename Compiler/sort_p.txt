@@ -1,0 +1,105 @@
+int main() {
+    array int arr;
+    array int temp;
+    int size;
+    size = 10000;
+
+    arr = New(size);
+    temp = New(size);
+
+    int i;
+    i = 0;
+    while (i < size) {
+        arr[i] = size - i;
+        i = i + 1;
+    }
+
+
+    array int stack;
+    int stackSize;
+    stackSize = 0;
+
+
+    stack = New(size * 3);
+
+    stack[stackSize] = 0;
+    stack[stackSize + 1] = size - 1;
+    stack[stackSize + 2] = 0;
+    stackSize = stackSize + 3;
+
+    while (stackSize > 0) {
+        stackSize = stackSize - 3;
+        int left;
+        int right;
+        int phase;
+        left = stack[stackSize];
+        right = stack[stackSize + 1];
+        phase = stack[stackSize + 2];
+
+        if (phase == 0) {
+            if (left < right) {
+                int mid;
+                mid = (left + right) / 2;
+
+                stack[stackSize] = left;
+                stack[stackSize + 1] = right;
+                stack[stackSize + 2] = 1;
+                stackSize = stackSize + 3;
+
+                stack[stackSize] = mid + 1;
+                stack[stackSize + 1] = right;
+                stack[stackSize + 2] = 0;
+                stackSize = stackSize + 3;
+
+                stack[stackSize] = left;
+                stack[stackSize + 1] = mid;
+                stack[stackSize + 2] = 0;
+                stackSize = stackSize + 3;
+            }
+        }
+        else {
+            if (left < right) {
+                int mid;
+                mid = (left + right) / 2;
+
+                int i;
+                int j;
+                int k;
+                i = left;
+                j = mid + 1;
+                k = left;
+
+                while ((i <= mid) && (j <= right)) {
+                    if (arr[i] <= arr[j]) {
+                        temp[k] = arr[i];
+                        i = i + 1;
+                    } else {
+                        temp[k] = arr[j];
+                        j = j + 1;
+                    }
+                    k = k + 1;
+                }
+
+                while (i <= mid) {
+                    temp[k] = arr[i];
+                    i = i + 1;
+                    k = k + 1;
+                }
+
+                while (j <= right) {
+                    temp[k] = arr[j];
+                    j = j + 1;
+                    k = k + 1;
+                }
+
+                k = left;
+                while (k <= right) {
+                    arr[k] = temp[k];
+                    k = k + 1;
+                }
+            }
+        }
+    }
+
+    print(arr);
+}
