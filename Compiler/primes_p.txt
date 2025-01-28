@@ -1,0 +1,41 @@
+int main() {
+    int maxN;
+    maxN = 100000;
+
+    array int flags;
+    flags = New(maxN + 1);
+
+    int i;
+        int j;
+
+        i = 2;
+        while (i <= maxN) {
+            flags[i] = 0;
+            i = i + 1;
+        }
+
+        i = 2;
+        while (i * i <= maxN) {
+            int val;
+            val = flags[i];
+            if (val == 0) {
+                j = i * i;
+                while (j <= maxN) {
+                    flags[j] = 1;
+                    j = j + i;
+                }
+            }
+            i = i + 1;
+        }
+
+    int k;
+    k = 2;
+    while (k <= maxN) {
+        int mark;
+        mark = flags[k];
+        if (mark == 0) {
+            print(k);
+        }
+        k = k + 1;
+    }
+}
